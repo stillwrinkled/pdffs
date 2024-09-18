@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}PDF Tools - Home{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">PDF Tools</h1>
+<div class="grid-container">
+    <a href="/merge" class="tool-card bg-red-100">
+        <i data-feather="git-merge" class="tool-icon text-red-500"></i>
+        <span class="tool-name">Merge PDFs</span>
+    </a>
+    <a href="/split" class="tool-card bg-blue-100">
+        <i data-feather="scissors" class="tool-icon text-blue-500"></i>
+        <span class="tool-name">Split PDF</span>
+    </a>
+    <a href="/compress" class="tool-card bg-green-100">
+        <i data-feather="minimize-2" class="tool-icon text-green-500"></i>
+        <span class="tool-name">Compress PDF</span>
+    </a>
+    <a href="/convert" class="tool-card bg-yellow-100">
+        <i data-feather="refresh-cw" class="tool-icon text-yellow-500"></i>
+        <span class="tool-name">Convert PDF</span>
+    </a>
+    <a href="/watermark" class="tool-card bg-purple-100">
+        <i data-feather="image" class="tool-icon text-purple-500"></i>
+        <span class="tool-name">Add Watermark</span>
+    </a>
+    <a href="/page_numbers" class="tool-card bg-pink-100">
+        <i data-feather="hash" class="tool-icon text-pink-500"></i>
+        <span class="tool-name">Add Page Numbers</span>
+    </a>
+    <a href="/rotate" class="tool-card bg-indigo-100">
+        <i data-feather="rotate-cw" class="tool-icon text-indigo-500"></i>
+        <span class="tool-name">Rotate PDF</span>
+    </a>
+    <a href="/delete_pages" class="tool-card bg-gray-100">
+        <i data-feather="trash-2" class="tool-icon text-gray-500"></i>
+        <span class="tool-name">Delete Pages</span>
+    </a>
+    <a href="/html_to_pdf" class="tool-card bg-orange-100">
+        <i data-feather="code" class="tool-icon text-orange-500"></i>
+        <span class="tool-name">HTML to PDF</span>
+    </a>
+    <a href="/form_fill" class="tool-card bg-teal-100">
+        <i data-feather="edit-3" class="tool-icon text-teal-500"></i>
+        <span class="tool-name">Fill PDF Form</span>
+    </a>
+</div>
+{% endblock %}

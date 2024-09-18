@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Convert PDF{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">Convert PDF</h1>
+<form action="{{ url_for('convert') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+    <div class="mb-4">
+        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file to convert:</label>
+        <input type="file" name="file" id="file" accept=".pdf" required class="form-input">
+    </div>
+    <div class="mb-4">
+        <label for="format" class="block text-gray-700 text-sm font-bold mb-2">Convert to:</label>
+        <select name="format" id="format" required class="form-input">
+            <option value="docx">Word (DOCX)</option>
+            <option value="xlsx">Excel (XLSX)</option>
+            <option value="pptx">PowerPoint (PPTX)</option>
+        </select>
+    </div>
+    <button type="submit" class="btn-primary w-full">Convert PDF</button>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Compress PDF{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">Compress PDF</h1>
+<form action="{{ url_for('compress') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+    <div class="mb-4">
+        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file to compress:</label>
+        <input type="file" name="file" id="file" accept=".pdf" required class="form-input">
+    </div>
+    <button type="submit" class="btn-primary w-full">Compress PDF</button>
+</form>
+{% endblock %}

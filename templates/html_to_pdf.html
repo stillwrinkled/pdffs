@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}HTML to PDF{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">HTML to PDF</h1>
+<form action="{{ url_for('html_to_pdf') }}" method="post" class="max-w-md mx-auto">
+    <div class="mb-4">
+        <label for="html_content" class="block text-gray-700 text-sm font-bold mb-2">HTML Content:</label>
+        <textarea name="html_content" id="html_content" rows="10" required class="form-input"></textarea>
+    </div>
+    <button type="submit" class="btn-primary w-full">Convert to PDF</button>
+</form>
+{% endblock %}
