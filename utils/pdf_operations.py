@@ -2,6 +2,9 @@ import PyPDF2
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+import pytesseract
+from pdf2image import convert_from_bytes
+from PIL import Image
 
 def merge_pdfs(files):
     merger = PyPDF2.PdfMerger()
@@ -41,7 +44,6 @@ def add_watermark(file, watermark_text):
     reader = PyPDF2.PdfReader(file)
     writer = PyPDF2.PdfWriter()
 
-    # Create watermark
     watermark_stream = io.BytesIO()
     c = canvas.Canvas(watermark_stream, pagesize=letter)
     c.setFont("Helvetica", 60)
@@ -122,3 +124,14 @@ def fill_form(file, form_data):
     writer.write(output)
     output.seek(0)
     return output
+
+def perform_ocr(file):
+    pdf_bytes = file.read()
+    images = convert_from_bytes(pdf_bytes)
+    
+    ocr_text = ""
+    for image in images:
+        text = pytesseract.image_to_string(image)
+        ocr_text += text + "\n\n"
+    
+    return ocr_text

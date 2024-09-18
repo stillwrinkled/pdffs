@@ -12,3 +12,6 @@ python-docx
 python-pptx
 reportlab
 xhtml2pdf
+pdf2image
+pillow
+pytesseract

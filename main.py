@@ -109,5 +109,14 @@ def form_fill():
             return send_file(filled_file, as_attachment=True, download_name='filled_form.pdf')
     return render_template('form_fill.html')
 
+@app.route('/ocr', methods=['GET', 'POST'])
+def ocr():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            ocr_text = pdf_operations.perform_ocr(file)
+            return render_template('ocr_result.html', ocr_text=ocr_text)
+    return render_template('ocr.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
