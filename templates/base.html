@@ -7,19 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        .drag-drop-zone {
-            border: 2px dashed #ccc;
-            border-radius: 20px;
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            transition: background-color 0.3s;
-        }
-        .drag-drop-zone.dragover {
-            background-color: #f0f0f0;
-        }
-    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <header class="bg-white shadow-md">
@@ -68,8 +55,14 @@
                 zone.addEventListener('drop', (e) => {
                     e.preventDefault();
                     zone.classList.remove('dragover');
-                    fileInput.files = e.dataTransfer.files;
-                    updateFileList(fileInput);
+                    if (e.dataTransfer.files.length > 0) {
+                        fileInput.files = e.dataTransfer.files;
+                        updateFileList(fileInput);
+                    }
+                });
+                
+                zone.addEventListener('click', () => {
+                    fileInput.click();
                 });
                 
                 fileInput.addEventListener('change', () => {
