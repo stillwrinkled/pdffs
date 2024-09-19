@@ -7,7 +7,11 @@
 <form action="{{ url_for('merge') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
     <div class="mb-4">
         <label for="files" class="block text-gray-700 text-sm font-bold mb-2">Select PDF files to merge:</label>
-        <input type="file" name="files" id="files" accept=".pdf" multiple required class="form-input">
+        <div class="drag-drop-zone">
+            <input type="file" name="files" id="files" accept=".pdf" multiple required class="hidden">
+            <p>Drag and drop PDF files here or click to select</p>
+        </div>
+        <ul class="file-list mt-2 text-sm text-gray-600"></ul>
     </div>
     <button type="submit" class="btn-primary w-full">Merge PDFs</button>
 </form>
