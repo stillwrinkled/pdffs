@@ -12,6 +12,8 @@ import tabula
 from PyPDF2 import PdfReader
 import tempfile
 import logging
+from io import BytesIO
+
 from PIL import Image  # For image processing
 
 # Configure logging
@@ -117,75 +119,75 @@ def convert_pdf_to_excel(file):
 
 
 def convert_pdf_to_pptx(file):
-    try:
-        prs = Presentation()
-        doc = fitz.open(stream=file.read(), filetype="pdf")
+    # Convert Flask's FileStorage to bytes
+    file_bytes = file.read()
 
-        for page_num, page in enumerate(doc.pages(), start=1):
-            slide = prs.slides.add_slide(prs.slide_layouts[5])
+    # Open the PDF using PyMuPDF with bytes stream
+    pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
 
-            # Extracting text and applying formatting
-            text_instances = page.get_text("dict")["blocks"]
-            y_position = Inches(0.5)  # Track Y position to avoid text overlap
+    # Create a new presentation object
+    prs = Presentation()
 
-            for block in text_instances:
-                if "lines" in block:
-                    for line in block["lines"]:
-                        # Create a new text box for each line to avoid text overlap
-                        if line.get("spans"):
-                            line_text = " ".join([span["text"] for span in line["spans"]])
+    for page_num in range(pdf_document.page_count):
+        # Extract the page
+        page = pdf_document[page_num]
 
-                            # Set position for each text box
-                            text_box = slide.shapes.add_textbox(Inches(0.5), y_position, Inches(8), Inches(0.5))
-                            text_frame = text_box.text_frame
-                            text_frame.word_wrap = True  # Enable text wrapping
-                            paragraph = text_frame.add_paragraph()
-                            paragraph.text = line_text
+        # Create a new slide
+        slide_layout = prs.slide_layouts[5]  # Use blank slide layout
+        slide = prs.slides.add_slide(slide_layout)
 
-                            # Increase the Y position for the next line
-                            y_position += Pt(12)  # Adjust the spacing between lines
+        # Extract text and images from the page
+        text_instances = page.get_text("dict")
+        image_instances = page.get_images(full=True)
 
-                            # Apply formatting
-                            for span in line["spans"]:
-                                run = paragraph.runs[0]
-                                if "font" in span:
-                                    run.font.name = span["font"]
-                                run.font.size = Pt(span.get("size", 12))
-                                if span.get("color") and isinstance(span["color"], (list, tuple)) and len(span["color"]) == 3:
-                                    run.font.color.rgb = RGBColor(*span["color"])
+        # Adding text to the slide
+        for block in text_instances["blocks"]:
+            if "lines" in block:
+                for line in block["lines"]:
+                    for span in line["spans"]:
+                        text = span["text"].strip()
+                        if text:
+                            # Add a textbox with the text to the slide
+                            left = Inches(0.5)  # Positioning of text box
+                            top = Inches(1 + page_num)  # Offset based on page
+                            width = Inches(9)
+                            height = Inches(0.5)
+                            textbox = slide.shapes.add_textbox(left, top, width, height)
+                            text_frame = textbox.text_frame
+                            p = text_frame.add_paragraph()
+                            run = p.add_run()
+                            run.text = text
+                            run.font.size = Pt(12)
+                            # Optional: Add some font styling (color, size)
+                            if "color" in span:
+                                run.font.color.rgb = RGBColor(0, 0, 0)  # Black color
+                            if "size" in span:
+                                run.font.size = Pt(span["size"])
 
-            # Extracting images and placing them on the slide
-            for img_index, img in enumerate(page.get_images(full=True), start=1):
-                xref = img[0]
-                base_image = doc.extract_image(xref)
-                image_bytes = base_image["image"]
-                img_extension = base_image["ext"]
+        # Adding images to the slide
+        for img in image_instances:
+            xref = img[0]
+            base_image = pdf_document.extract_image(xref)
+            image_bytes = base_image["image"]
+            image_ext = base_image["ext"]
 
-                try:
-                    image = Image.open(io.BytesIO(image_bytes))
-                    img_file = f"image_{page_num}_{img_index}.{img_extension}"
+            # Save the image to a file-like object
+            image_stream = BytesIO(image_bytes)
 
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=f".{img_extension}") as temp_img:
-                        image.save(temp_img, format=image.format)
-                        temp_img_path = temp_img.name
-                        slide.shapes.add_picture(temp_img_path, Inches(0.5), y_position, width=Inches(4))
+            # Add the image to the slide
+            left = Inches(0.5)
+            top = Inches(1 + page_num)
+            slide.shapes.add_picture(image_stream, left, top, width=Inches(3), height=Inches(2))
 
-                        # Update y_position to avoid image overlap
-                        y_position += Inches(2.5)
+    # Save the presentation as a file-like object
+    pptx_buffer = BytesIO()
+    prs.save(pptx_buffer)
 
-                except Exception as image_err:
-                    logger.error(f"Error processing image {img_file}: {image_err}")
+    # Reset the buffer's position to the beginning
+    pptx_buffer.seek(0)
 
-        output = io.BytesIO()
-        prs.save(output)
-        output_filename = "converted_file.pptx"
-        output.seek(0)
-        logger.info("PDF to PPTX conversion successful with enhanced formatting and text handling")
-        return output, output_filename
-
-    except Exception as e:
-        logger.error(f"Error during PDF to PPTX conversion: {e}")
-        raise ValueError("Failed to convert PDF to PPTX.")
+    # Return the PPTX file content and filename
+    return pptx_buffer, "converted_output.pptx"
 
 
 def convert_pdf_to_image(file, format):

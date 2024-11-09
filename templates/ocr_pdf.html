@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}OCR PDF to DOCX/XLSX{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">Convert PDF to Editable DOCX or XLSX</h1>
+
+<form id="ocr-form" action="{{ url_for('ocr_pdf') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+    <div class="mb-4">
+        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file for OCR:</label>
+        <div class="drag-drop-zone border-2 border-dashed border-gray-400 p-6 text-center">
+            <p class="text-gray-600">Drag and drop a PDF file here or click to upload</p>
+            <input type="file" name="file" id="file" accept=".pdf" class="hidden" required>
+            <ul id="file-list" class="file-list mt-2 text-sm text-gray-600"></ul>
+        </div>
+        <p id="file-error" class="text-red-600 text-sm mt-2 hidden">Invalid file type. Please upload a PDF file.</p>
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 w-full">
+        Convert to DOCX/XLSX
+    </button>
+</form>
+
+<script src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+
+<script>
+    // Additional error display logic or form validation if necessary
+</script>
+
+{% endblock %}

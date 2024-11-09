@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}URL to PDF{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">Convert URL to PDF</h1>
+
+<form id="url-to-pdf-form" action="{{ url_for('url_to_pdf') }}" method="post" class="max-w-md mx-auto">
+    <div class="mb-4">
+        <label for="url" class="block text-gray-700 text-sm font-bold mb-2">Webpage URL:</label>
+        <input type="url" name="url" id="url" placeholder="https://example.com" required class="form-input" />
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 w-full">
+        Convert to PDF
+    </button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Additional interactions or validations if needed
+    });
+</script>
+
+{% endblock %}

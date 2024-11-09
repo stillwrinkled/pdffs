@@ -1,40 +1,10 @@
-{% extends "base.html" %}
-
-{% block title %}Fill PDF Form{% endblock %}
-
-{% block content %}
-<h1 class="text-3xl font-bold mb-8 text-center">Fill PDF Form</h1>
-<form action="{{ url_for('form_fill') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
-    <div class="mb-4">
-        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF form:</label>
-        <div class="drag-drop-zone">
-            <input type="file" name="file" id="file" accept=".pdf" required>
-            <p>Click here to select a file or drag and drop it</p>
-        </div>
-        <ul class="file-list mt-2 text-sm text-gray-600"></ul>
-    </div>
-    <div id="form-fields">
-        <!-- Dynamic form fields will be added here -->
-    </div>
-    <button type="submit" class="btn-primary w-full mt-4">Fill Form</button>
-</form>
-
-<script>
-    document.getElementById('file').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        // Here you would typically send the file to the server to extract form fields
-        // For this example, we'll just add some dummy fields
-        const formFields = document.getElementById('form-fields');
-        formFields.innerHTML = `
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-                <input type="text" name="name" id="name" required class="form-input">
-            </div>
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-                <input type="email" name="email" id="email" required class="form-input">
-            </div>
-        `;
-    });
-</script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$Title$</title>
+</head>
+<body>
+$END$
+</body>
+</html>

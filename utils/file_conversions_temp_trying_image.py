@@ -1,22 +1,22 @@
 import io
 import os
 import zipfile
-import fitz  # PyMuPDF for PDF handling (fonts, images, etc.)
+from pdf2docx import Converter as PDF2DOCXConverter
+import fitz  # PyMuPDF for converting PDF to images (JPEG/PNG)
 from openpyxl import Workbook
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
-from pdf2docx import Converter as PDF2DOCXConverter
-import camelot
-import tabula
-from PyPDF2 import PdfReader
-import tempfile
+import camelot  # For extracting tables from PDF
+import tabula  # Alternative for extracting tables using Java
 import logging
-from PIL import Image  # For image processing
+from PIL import Image
+import tempfile
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 def convert_pdf(file, format):
     output = io.BytesIO()
@@ -30,6 +30,8 @@ def convert_pdf(file, format):
         return convert_pdf_to_pptx(file)
     elif format in ['jpeg', 'png']:
         return convert_pdf_to_image(file, format)
+    elif format == 'dcx':
+        return convert_pdf_to_dcx(file)
 
     output.seek(0)
     return output, None
@@ -124,63 +126,38 @@ def convert_pdf_to_pptx(file):
         for page_num, page in enumerate(doc.pages(), start=1):
             slide = prs.slides.add_slide(prs.slide_layouts[5])
 
-            # Extracting text and applying formatting
+            # Extract text instances
             text_instances = page.get_text("dict")["blocks"]
-            y_position = Inches(0.5)  # Track Y position to avoid text overlap
 
-            for block in text_instances:
-                if "lines" in block:
-                    for line in block["lines"]:
-                        # Create a new text box for each line to avoid text overlap
-                        if line.get("spans"):
-                            line_text = " ".join([span["text"] for span in line["spans"]])
+            # Existing text extraction and positioning logic
+            # ...
 
-                            # Set position for each text box
-                            text_box = slide.shapes.add_textbox(Inches(0.5), y_position, Inches(8), Inches(0.5))
-                            text_frame = text_box.text_frame
-                            text_frame.word_wrap = True  # Enable text wrapping
-                            paragraph = text_frame.add_paragraph()
-                            paragraph.text = line_text
-
-                            # Increase the Y position for the next line
-                            y_position += Pt(12)  # Adjust the spacing between lines
-
-                            # Apply formatting
-                            for span in line["spans"]:
-                                run = paragraph.runs[0]
-                                if "font" in span:
-                                    run.font.name = span["font"]
-                                run.font.size = Pt(span.get("size", 12))
-                                if span.get("color") and isinstance(span["color"], (list, tuple)) and len(span["color"]) == 3:
-                                    run.font.color.rgb = RGBColor(*span["color"])
-
-            # Extracting images and placing them on the slide
+            # Extract images and place on slide
             for img_index, img in enumerate(page.get_images(full=True), start=1):
-                xref = img[0]
-                base_image = doc.extract_image(xref)
-                image_bytes = base_image["image"]
-                img_extension = base_image["ext"]
-
                 try:
+                    xref = img[0]
+                    base_image = doc.extract_image(xref)
+                    image_bytes = base_image["image"]
+                    img_extension = base_image["ext"]
+
+                    # Try to open the image to verify it's valid
                     image = Image.open(io.BytesIO(image_bytes))
                     img_file = f"image_{page_num}_{img_index}.{img_extension}"
 
                     with tempfile.NamedTemporaryFile(delete=False, suffix=f".{img_extension}") as temp_img:
-                        image.save(temp_img, format=image.format)
+                        temp_img.write(image_bytes)
                         temp_img_path = temp_img.name
-                        slide.shapes.add_picture(temp_img_path, Inches(0.5), y_position, width=Inches(4))
+                        slide.shapes.add_picture(temp_img_path, Inches(0.5), Inches(2), width=Inches(4))
 
-                        # Update y_position to avoid image overlap
-                        y_position += Inches(2.5)
-
-                except Exception as image_err:
-                    logger.error(f"Error processing image {img_file}: {image_err}")
+                except Exception as img_error:
+                    logger.error(f"Error processing image on page {page_num}, image index {img_index}: {img_error}")
+                    continue  # Skip this image and continue with the rest
 
         output = io.BytesIO()
         prs.save(output)
         output_filename = "converted_file.pptx"
         output.seek(0)
-        logger.info("PDF to PPTX conversion successful with enhanced formatting and text handling")
+        logger.info("PDF to PPTX conversion successful")
         return output, output_filename
 
     except Exception as e:
@@ -221,3 +198,36 @@ def convert_pdf_to_image(file, format):
     except fitz.FileDataError as e:
         logger.error(f"Error during image conversion: {e}")
         raise ValueError("Failed to process the PDF file. Please check if it's a valid PDF.")
+
+
+def convert_pdf_to_dcx(file):
+    try:
+        doc = fitz.open(stream=file.read(), filetype="pdf")
+        output = io.BytesIO()
+
+        if len(doc) > 1:
+            with zipfile.ZipFile(output, mode='w', compression=zipfile.ZIP_DEFLATED) as dcx_zip:
+                for page_num in range(len(doc)):
+                    page = doc.load_page(page_num)
+                    pix = page.get_pixmap()
+                    img_bytes = pix.tobytes("DCX")
+                    img_filename = f'page_{page_num + 1}.dcx'
+                    dcx_zip.writestr(img_filename, img_bytes)
+
+            output_filename = "converted_pages.dcx.zip"
+            output.seek(0)
+            logger.info("PDF to DCX conversion successful")
+            return output, output_filename
+
+        else:
+            pix = doc.load_page(0).get_pixmap()
+            img_bytes = pix.tobytes("DCX")
+            output.write(img_bytes)
+            output_filename = "converted_page.dcx"
+            output.seek(0)
+            logger.info("PDF to single-page DCX conversion successful")
+            return output, output_filename
+
+    except fitz.FileDataError as e:
+        logger.error(f"Error during DCX conversion: {e}")
+        raise ValueError("Failed to process the PDF file for DCX conversion.")
