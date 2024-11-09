@@ -1,10 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}pdffs{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body>
-$END$
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-xl font-bold text-gray-800">pdffs</a>
+                <div>
+                    <a href="/" class="text-gray-600 hover:text-gray-800 px-3 py-2">Home</a>
+                    <a href="/merge" class="text-gray-600 hover:text-gray-800 px-3 py-2">Merge</a>
+                    <a href="/split" class="text-gray-600 hover:text-gray-800 px-3 py-2">Split</a>
+                    <a href="/compress" class="text-gray-600 hover:text-gray-800 px-3 py-2">Compress</a>
+                    <a href="/watermark" class="text-gray-600 hover:text-gray-800 px-3 py-2">Watermark</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white shadow-md mt-8">
+        <div class="container mx-auto px-6 py-3 text-center text-gray-600">
+            &copy; 2023 pdffs. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Include existing custom scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Include the new drag-and-drop JavaScript file -->
+    <script src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+
+    <!-- Replace feather icons -->
+    <script>
+        feather.replace()
+    </script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, send_file
 import os
 from utils import pdf_operations, file_conversions  # Ensure this line is correct
-from flask import send_file
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -69,11 +68,9 @@ def convert():
             try:
                 converted_file, filename = file_conversions.convert_pdf(file, format)
                 if filename.endswith('.zip'):
-                    return send_file(converted_file, as_attachment=True, download_name=filename,
-                                     mimetype='application/zip')
+                    return send_file(converted_file, as_attachment=True, download_name=filename, mimetype='application/zip')
                 else:
-                    return send_file(converted_file, as_attachment=True, download_name=filename,
-                                     mimetype=f'image/{format}')
+                    return send_file(converted_file, as_attachment=True, download_name=filename, mimetype=f'image/{format}')
             except ValueError as e:
                 # Return error to frontend if conversion fails
                 return render_template('convert.html', error=str(e))
@@ -122,21 +119,6 @@ def delete_pages():
             return send_file(modified_file, as_attachment=True, download_name='modified.pdf')
     return render_template('delete_pages.html')
 
-
-@app.route('/convert', methods=['POST'])
-def convert():
-    file = request.files['file']
-    format = request.form.get('format')
-
-    converted_file, filename = file_conversions.convert_pdf(file, format)
-
-    # Send the file using Flask's send_file
-    return send_file(
-        converted_file,
-        as_attachment=True,
-        download_name=filename,
-        mimetype="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    )
 
 
 if __name__ == '__main__':

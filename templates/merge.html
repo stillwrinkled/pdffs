@@ -1,18 +1,15 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}Merge PDFs{% endblock %}
 
 {% block content %}
 <h1 class="text-3xl font-bold mb-8 text-center">Merge PDFs</h1>
-<form action="{{ url_for('merge') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
-    <div class="mb-4">
-        <label for="files" class="block text-gray-700 text-sm font-bold mb-2">Select PDF files to merge:</label>
-        <div class="drag-drop-zone">
-            <input type="file" name="files" id="files" accept=".pdf" multiple required>
-            <p>Click here to select files or drag and drop them</p>
-        </div>
-        <ul class="file-list mt-2 text-sm text-gray-600"></ul>
+<form action="{{ url_for('merge') }}" method="POST" enctype="multipart/form-data" class="max-w-md mx-auto">
+    <div id="merge-drop-zone" class="drag-drop-zone border-2 border-dashed border-gray-400 p-6 text-center">
+        <p class="text-gray-600">Drag and drop your PDF files here or click to upload</p>
+        <input type="file" id="files" name="files" accept=".pdf" multiple class="hidden">
+        <ul id="merge-file-list" class="file-list mt-4"></ul>
     </div>
-    <button type="submit" class="btn-primary w-full">Merge PDFs</button>
+    <button type="submit" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded">Merge PDFs</button>
 </form>
 {% endblock %}

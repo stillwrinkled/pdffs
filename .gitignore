@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directory
+venv/
+.venv/
+
+# PyCharm specific files
+.idea/
+*.iml
+
+# macOS specific files
+.DS_Store
+
+# Log files
+*.log
+replit_zip_error_log.txt
+
+# Temporary or backup Python files
+*.bak
+*.swp
+*~
+
+# Dependencies file if created by Replit or similar platforms
+replit.nix
+
+# Local uploads folder to avoid tracking uploaded files
+uploads/
+
+# Ignore environment or configuration files
+.env
+
+__pycache__
+file_conversions_excel_works.py
+file_conversions_excel_works_final.py
+pdf_operations_3rd_Nov.py
+file_conversions2.py
+file_conversions_new_approach_didnt_work.py
+pdf_operations_backup_3rd_nov.py
+file_conversions_SOS_Copy.py
+file_conversions_temp_trying_image.py
+file_conversions_backup.py
+file_conversions_works.py
+
+main_before_flask_enhancements.py
+replit_zip_error_log.txt
+main_2nd_nov.py
+main_excel_works.py
+main_backup.py
+main_for_pptx.py
+main_backup2.py
+replit.nix
+
+
+
+base_old.html
+fill_form_view.html merge.html
+
+dragdrop_backup.js

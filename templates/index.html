@@ -3,51 +3,62 @@
 {% block title %}PDF Tools - Home{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl font-bold mb-8 text-center">PDF Tools</h1>
-<div class="grid-container">
-    <a href="/merge" class="tool-card bg-red-100">
-        <i data-feather="git-merge" class="tool-icon text-red-500"></i>
-        <span class="tool-name">Merge PDFs</span>
+<h1 class="text-4xl font-bold mb-8 text-center">pdffs</h1>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8 p-4 lg:p-6 max-w-4xl mx-auto" style="height: 50vh;">
+    <a href="/merge" class="tool-card bg-red-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="git-merge" class="tool-icon text-red-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Merge PDFs</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Combine PDFs in desired order.</p>
     </a>
-    <a href="/split" class="tool-card bg-blue-100">
-        <i data-feather="scissors" class="tool-icon text-blue-500"></i>
-        <span class="tool-name">Split PDF</span>
+    <a href="/split" class="tool-card bg-blue-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="scissors" class="tool-icon text-blue-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Split PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Separate pages from a PDF.</p>
     </a>
-    <a href="/compress" class="tool-card bg-green-100">
-        <i data-feather="minimize-2" class="tool-icon text-green-500"></i>
-        <span class="tool-name">Compress PDF</span>
+    <a href="/compress" class="tool-card bg-green-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="minimize-2" class="tool-icon text-green-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Compress PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Reduce PDF size for sharing.</p>
     </a>
-    <a href="/convert" class="tool-card bg-yellow-100">
-        <i data-feather="refresh-cw" class="tool-icon text-yellow-500"></i>
-        <span class="tool-name">Convert PDF</span>
+    <a href="/convert" class="tool-card bg-yellow-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="refresh-cw" class="tool-icon text-yellow-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Convert PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Change PDF to other formats.</p>
     </a>
-    <a href="/watermark" class="tool-card bg-purple-100">
-        <i data-feather="image" class="tool-icon text-purple-500"></i>
-        <span class="tool-name">Add Watermark</span>
+    <a href="/watermark" class="tool-card bg-purple-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="image" class="tool-icon text-purple-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Add Watermark</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Overlay text or image watermark.</p>
     </a>
-    <a href="/page_numbers" class="tool-card bg-pink-100">
-        <i data-feather="hash" class="tool-icon text-pink-500"></i>
-        <span class="tool-name">Add Page Numbers</span>
+    <a href="/page_numbers" class="tool-card bg-pink-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="hash" class="tool-icon text-pink-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Add Page Numbers</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Insert page numbers into PDF.</p>
     </a>
-    <a href="/rotate" class="tool-card bg-indigo-100">
-        <i data-feather="rotate-cw" class="tool-icon text-indigo-500"></i>
-        <span class="tool-name">Rotate PDF</span>
+    <a href="/rotate" class="tool-card bg-indigo-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="rotate-cw" class="tool-icon text-indigo-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Rotate PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Change orientation of PDF pages.</p>
     </a>
-    <a href="/delete_pages" class="tool-card bg-gray-100">
-        <i data-feather="trash-2" class="tool-icon text-gray-500"></i>
-        <span class="tool-name">Delete Pages</span>
+    <a href="/delete_pages" class="tool-card bg-gray-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="trash-2" class="tool-icon text-gray-600 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Delete Pages</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Remove unwanted pages from PDF.</p>
     </a>
-    <a href="/html_to_pdf" class="tool-card bg-orange-100">
-        <i data-feather="code" class="tool-icon text-orange-500"></i>
-        <span class="tool-name">HTML to PDF</span>
+    <a href="/url_to_pdf" class="tool-card bg-orange-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="link" class="tool-icon text-orange-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">URL to PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Convert a webpage URL to PDF.</p>
     </a>
-    <a href="/form_fill" class="tool-card bg-teal-100">
-        <i data-feather="edit-3" class="tool-icon text-teal-500"></i>
-        <span class="tool-name">Fill PDF Form</span>
+ <a href="/ocr_pdf" class="tool-card bg-lime-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="eye" class="tool-icon text-lime-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">OCR PDF</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Extract text from scanned PDFs.</p>
     </a>
-    <a href="/ocr" class="tool-card bg-lime-100">
-        <i data-feather="eye" class="tool-icon text-lime-500"></i>
-        <span class="tool-name">OCR PDF</span>
+    <a href="/form_fill" class="tool-card bg-teal-200 p-4 lg:p-6 shadow-md rounded-lg">
+        <i data-feather="edit-3" class="tool-icon text-teal-500 w-10 h-10 lg:w-12 lg:h-12"></i>
+        <span class="tool-name block mt-2 text-xl lg:text-2xl font-semibold">Fill PDF Form</span>
+        <p class="tool-description mt-1 text-left text-sm lg:text-base text-gray-700">Complete and save PDF forms.</p>
     </a>
 </div>
 {% endblock %}

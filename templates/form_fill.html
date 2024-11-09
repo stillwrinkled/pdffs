@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Fill PDF Form{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-8 text-center">Fill PDF Form</h1>
+
+<div class="drag-drop-zone border-2 border-dashed border-gray-400 p-6 text-center">
+    <p class="text-gray-600">Drag and drop a PDF form here or click to upload</p>
+    <input type="file" name="file" id="file" accept=".pdf" class="hidden" required>
+    <ul id="file-list" class="file-list mt-2 text-sm text-gray-600"></ul>
+</div>
+
+<form id="form-fill" action="{{ url_for('form_fill') }}" method="POST" enctype="multipart/form-data">
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 mt-4">
+        Fill Form
+    </button>
+</form>
+
+<script src="{{ url_for('static', filename='js/dragdrop.js') }}"></script>
+{% endblock %}

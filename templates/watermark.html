@@ -3,20 +3,67 @@
 {% block title %}Add Watermark{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl font-bold mb-8 text-center">Add Watermark</h1>
-<form action="{{ url_for('watermark') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
+<h1 class="text-3xl font-bold mb-8 text-center">Add Watermark to PDF</h1>
+
+<form id="watermark-form" action="{{ url_for('watermark') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
     <div class="mb-4">
-        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file:</label>
-        <div class="drag-drop-zone">
-            <input type="file" name="file" id="file" accept=".pdf" required>
-            <p>Click here to select a file or drag and drop it</p>
+        <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file to add watermark:</label>
+        <div class="drag-drop-zone border-2 border-dashed border-gray-400 p-6 text-center">
+            <p class="text-gray-600">Drag and drop a PDF file here or click to upload</p>
+            <input type="file" name="file" id="file" accept=".pdf" class="hidden" required>
+            <ul id="file-list" class="file-list mt-2 text-sm text-gray-600"></ul>
         </div>
-        <ul class="file-list mt-2 text-sm text-gray-600"></ul>
+        <p id="file-error" class="text-red-600 text-sm mt-2 hidden">Invalid file type. Please upload a PDF file.</p>
     </div>
+
     <div class="mb-4">
-        <label for="watermark_text" class="block text-gray-700 text-sm font-bold mb-2">Watermark text:</label>
-        <input type="text" name="watermark_text" id="watermark_text" required class="form-input">
+        <label for="watermark_text" class="block text-gray-700 text-sm font-bold mb-2">Enter Watermark Text:</label>
+        <input type="text" name="watermark_text" id="watermark_text" class="form-input" placeholder="Watermark text" required>
     </div>
-    <button type="submit" class="btn-primary w-full">Add Watermark</button>
+
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 w-full">
+        Add Watermark
+    </button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('file');
+        const fileList = document.getElementById('file-list');
+        const fileError = document.getElementById('file-error');
+        const form = document.getElementById('watermark-form');
+
+        // Handle file selection and validate file extension
+        fileInput.addEventListener('change', function() {
+            fileError.classList.add('hidden');  // Hide error initially
+            fileList.innerHTML = '';  // Clear previous list
+            const file = fileInput.files[0];
+            if (file) {
+                const fileName = file.name;
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                if (fileExtension === 'pdf') {
+                    // Highlight selected file
+                    const li = document.createElement('li');
+                    li.textContent = fileName;
+                    li.classList.add('selected-file');
+                    fileList.appendChild(li);
+                } else {
+                    // Show error for invalid file type
+                    fileError.classList.remove('hidden');
+                    fileInput.value = '';  // Clear the input
+                }
+            }
+        });
+
+        // Prevent form submission if file type is invalid
+        form.addEventListener('submit', function(event) {
+            const file = fileInput.files[0];
+            if (!file || !file.name.endsWith('.pdf')) {
+                fileError.classList.remove('hidden');
+                event.preventDefault();  // Prevent form submission
+            }
+        });
+    });
+</script>
+
 {% endblock %}

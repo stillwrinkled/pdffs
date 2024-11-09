@@ -6,9 +6,16 @@
 <h1 class="text-3xl font-bold mb-8 text-center">Convert URL to PDF</h1>
 
 <form id="url-to-pdf-form" action="{{ url_for('url_to_pdf') }}" method="post" class="max-w-md mx-auto">
-    <div class="mb-4">
+    <div class="mb-4 relative">
         <label for="url" class="block text-gray-700 text-sm font-bold mb-2">Webpage URL:</label>
-        <input type="url" name="url" id="url" placeholder="https://example.com" required class="form-input" />
+        <div class="flex">
+            <input type="url" name="url" id="url" placeholder="https://example.com" required
+                   class="form-input w-full px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:border-blue-500" />
+            <button type="button" onclick="clearUrlField()"
+                    class="px-3 py-2 bg-gray-300 text-gray-600 rounded-r hover:bg-gray-400 focus:outline-none">
+                X
+            </button>
+        </div>
     </div>
 
     <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 w-full">
@@ -16,10 +23,21 @@
     </button>
 </form>
 
+<!-- Display flash messages below the button -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="mt-4 bg-gray-100 text-gray-800 text-center p-3 rounded w-full max-w-md mx-auto">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Additional interactions or validations if needed
-    });
+    function clearUrlField() {
+        document.getElementById('url').value = '';
+    }
 </script>
 
 {% endblock %}

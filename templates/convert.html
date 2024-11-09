@@ -4,23 +4,48 @@
 
 {% block content %}
 <h1 class="text-3xl font-bold mb-8 text-center">Convert PDF</h1>
+
 <form action="{{ url_for('convert') }}" method="post" enctype="multipart/form-data" class="max-w-md mx-auto">
     <div class="mb-4">
         <label for="file" class="block text-gray-700 text-sm font-bold mb-2">Select PDF file to convert:</label>
-        <div class="drag-drop-zone">
-            <input type="file" name="file" id="file" accept=".pdf" required class="hidden">
-            <p>Drag and drop a PDF file here or click to select</p>
+        <div class="drag-drop-zone border-2 border-dashed border-gray-400 p-6 text-center">
+            <p class="text-gray-600">Drag and drop a PDF file here or click to select</p>
+            <input type="file" name="file" id="file" accept=".pdf" class="hidden" required>
+            <ul class="file-list mt-2 text-sm text-gray-600"></ul>
         </div>
-        <ul class="file-list mt-2 text-sm text-gray-600"></ul>
     </div>
+
     <div class="mb-4">
         <label for="format" class="block text-gray-700 text-sm font-bold mb-2">Convert to:</label>
         <select name="format" id="format" required class="form-input">
             <option value="docx">Word (DOCX)</option>
             <option value="xlsx">Excel (XLSX)</option>
             <option value="pptx">PowerPoint (PPTX)</option>
+            <option value="jpeg">Image (JPEG)</option>
+            <option value="png">Image (PNG)</option>
         </select>
     </div>
-    <button type="submit" class="btn-primary w-full">Convert PDF</button>
+
+    <!-- Disclaimer for PDF to PPTX -->
+    <div class="alert alert-warning">
+        <strong>Notice:</strong> The PDF to PPTX conversion feature is still in development and may not produce the desired output. Use with caution.
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200 w-full">
+        Convert PDF
+    </button>
 </form>
+
+<!-- Only display flash messages related to conversion -->
+{% if get_flashed_messages() %}
+<div class="alert-error mt-4 text-red-600 text-center">
+    {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Link to the dragdrop.js file -->
+<script src="{{ url_for('static', filename='dragdrop.js') }}"></script>
+
 {% endblock %}

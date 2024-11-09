@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Fill PDF Form - Preview{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4 text-center">Complete and Save Your Form</h1>
+
+<div class="pdf-viewer-container">
+    <form action="{{ url_for('form_fill_view', filename=filename) }}" method="POST" id="pdf-form">
+        <div id="pdf-form-container" class="flex flex-col items-center" data-pdf-url="{{ url_for('static', filename='uploads/' + filename) }}">
+            <!-- PDF will be rendered here with fillable fields -->
+        </div>
+        <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200 mt-4">
+            Save Form
+        </button>
+    </form>
+</div>
+
+<!-- Include PDF rendering and field handling script -->
+<script src="{{ url_for('static', filename='js/pdf_fill.js') }}"></script>
+{% endblock %}
